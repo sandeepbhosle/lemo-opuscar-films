@@ -46,7 +46,7 @@ node marketing/msubs/render.cjs --vo
 
 Background music: `vo/music.wav`, a 20 s instrumental generated with ElevenLabs Music (`eleven_music_v2_5`). Each video starts the music late enough that its final chord lands on the last frame. It sits about 9–10 dB under the voice and dips further while someone speaks (sidechain ducking). Change `MUSIC_DB` in `render.cjs` to make it louder or quieter, or delete `vo/music.wav` for voice only.
 
-The finished mix is about −15 LUFS with peaks under −1 dB, which suits Meta, LinkedIn and YouTube. Use the silent 15 s cuts in `out/video/` for YouTube non-skippable (15 s max) and for placements that autoplay muted.
+The finished mix is about −16 LUFS with peaks around −2 dB, which suits Meta, LinkedIn and YouTube. Use the silent 15 s cuts in `out/video/` for YouTube non-skippable (15 s max) and for placements that autoplay muted.
 
 ## Claims check
 

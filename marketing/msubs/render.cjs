@@ -52,7 +52,7 @@ function mixVoice(story) {
         `atrim=start=${Math.max(0, MUSIC_LEN - tl.dur).toFixed(2)},asetpts=PTS-STARTPTS,apad,atrim=0:${tl.dur},` +
         `afade=t=in:d=0.6,afade=t=out:st=${(tl.dur - 0.4).toFixed(2)}:d=0.4[m]`,
       `[m][key]sidechaincompress=threshold=0.02:ratio=6:attack=15:release=350[md]`,
-      `[v][md]amix=inputs=2:normalize=0,alimiter=limit=0.79,aresample=48000[out]`];
+      `[v][md]amix=inputs=2:normalize=0,alimiter=limit=0.84:level=0,aresample=48000[out]`];
   } else {
     graph = [...chains, `${voice}[out]`];
   }
