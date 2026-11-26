@@ -132,7 +132,7 @@ The voiced cuts in `out/video-vo/` use these lines, read by Kaanha (an Indian En
 - 0.3s: "AI does ninety percent of the work."
 - 2.5s: "It flags what it isn't sure of: names, terms, speakers. Your editor fixes each one in a click."
 - 9.7s: "Approve, and export."
-- 12.2s: "AI for speed. Humans for trust. mSUBS, by Infoesearch."
+- 12.2s: "AI for speed. Human for trust. mSUBS, by Infoesearch."
 
 For YouTube non-skippable (15 s max) use the silent 15 s cuts in `out/video/`.
 
