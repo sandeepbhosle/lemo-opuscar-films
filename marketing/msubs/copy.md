@@ -112,26 +112,29 @@ Keyword themes: `ai subtitle generator`, `subtitle translation`, `srt generator`
 
 ---
 
-## YouTube / CTV: 15s spots (sound-off friendly)
+## YouTube / CTV: voiceover scripts
 
-The videos are silent and self-explanatory. If you add a voiceover, these scripts fit the timing:
+The voiced cuts in `out/video-vo/` use these lines, as recorded (start time in seconds):
 
-**File Subs (15s)**
-- 0–2s: "Drop a video…"
-- 2–7s: "mSUBS transcribes it, syncs every timecode and translates it into 100-plus languages."
-- 7–11s: "Export SRT, VTT, SCC, TTML or burned-in."
-- 11–15s: "mSUBS by Infoesearch. Start free at msubs dot in."
+**File Subs (17.2s)**
+- 0.3s: "Drop a video."
+- 1.5s: "mSUBS transcribes it, syncs every timecode, and translates it into over a hundred languages."
+- 7.4s: "Export SRT, VTT, SCC, TTML, or burned in."
+- 12.6s: "mSUBS, by Infoesearch. Start free at msubs dot in."
 
-**Live Subs (15s)**
-- 0–2s: "Going live?"
-- 2–11s: "mSUBS captions your stream within seconds and translates it live, from OBS, vMix, RTMP or HLS."
-- 11–15s: "mSUBS Live Subs, by Infoesearch."
+**Live Subs (15.6s)**
+- 0.3s: "Going live?"
+- 1.4s: "Send your stream from OBS, vMix, or any RTMP or HLS link."
+- 6.7s: "mSUBS captions every word within seconds, and translates it live."
+- 12.4s: "mSUBS Live Subs, by Infoesearch."
 
-**Human edit (15s)**
-- 0–2s: "AI does ninety percent."
-- 2–9s: "mSUBS flags what it isn't sure of: names, terms, speakers. Your editor fixes them in a click."
-- 9–11s: "Approve and export."
-- 11–15s: "AI for speed. Human editors for trust. mSUBS by Infoesearch."
+**Human edit (16.8s)**
+- 0.3s: "AI does ninety percent of the work."
+- 2.8s: "It flags what it isn't sure of: names, terms, speakers. Your editor fixes each one in a click."
+- 9.75s: "Approve, and export."
+- 12.3s: "AI for speed. Humans for trust. mSUBS."
+
+For YouTube non-skippable (15 s max) use the silent 15 s cuts in `out/video/`.
 
 **6s bumper (cut from `edit-landscape.mp4` 4s–10s, then end card):** "AI does 90%. Your team makes it 100%. mSUBS."
 

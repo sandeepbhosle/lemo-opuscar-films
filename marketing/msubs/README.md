@@ -18,6 +18,9 @@ Each video is 15 seconds: about 12 s of product demo, then an end card with the 
 | `assets/` | mSUBS logo (from the msubs.in favicon) and the Infoesearch wordmark, plus a white version for dark backgrounds |
 | `out/video/<story>-<format>.mp4` | 9 videos: 3 stories × landscape 1920×1080, square 1080×1080, story 1080×1920 |
 | `out/stills/<story>-<format>-{demo,end}.png` | 18 static ads: a product frame and the end card for each video |
+| `out/video-vo/<story>-<format>.mp4` | The same 9 videos with a voiceover (File 17.2 s, Live 15.6 s, Human edit 16.8 s; the end card runs longer to fit the last line) |
+| `out/audio/<story>-vo.wav` | Each story's voice track on its own, for editors |
+| `vo/` | The 12 voice lines (`lines.tsv` has their text; `.mp3` as generated, `.wav` silence-trimmed) and `timeline.json`, which places each line on the video timeline |
 
 Colours come from the logo: navy #06264D, purple #775BC9, blue #2A80ED, teal #08C1B9, light blue #A1E1FF. They're defined as CSS variables at the top of `ad.html`.
 
@@ -30,6 +33,18 @@ node marketing/msubs/render.cjs
 List stories to render only those (`node marketing/msubs/render.cjs edit`). `--cta "Book a demo"` changes the button text, `--url "infoesearch.com/msubs"` replaces the line under it, and `--fps 60` raises the frame rate. All 9 videos take about 2½ minutes. It needs Node with Playwright and Chromium, `ffmpeg`, and the Inter and JetBrains Mono fonts.
 
 URL parameters for previewing `ad.html`: `story` (`file|live|edit`), `format` (`landscape|square|story`), `t` (freeze at a second), `url`, `cta`.
+
+## Voiceover
+
+Voice: **Douglas** (ElevenLabs library voice, model `eleven_v4`), one take per line, generated in the ElevenLabs flow "mSUBS ad voiceovers". Brand names were given pronunciation hints: mSUBS as "em-subs", Infoesearch as "info-e-search".
+
+Re-render the voiced videos after changing `timeline.json` or replacing a `vo/<id>.wav`:
+
+```bash
+node marketing/msubs/render.cjs --vo
+```
+
+Each story's track is mixed to −16 LUFS (peaks −1.5 dB), which suits Meta, LinkedIn and YouTube. Use the silent 15 s cuts in `out/video/` for YouTube non-skippable (15 s max) and for placements that autoplay muted.
 
 ## Claims check
 

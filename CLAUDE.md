@@ -23,6 +23,7 @@ There is no build system, package.json, linter or test suite.
 - Each story is an entry in the `STORIES` object (`win` markup + `render(t)`). Shared intro/outro lives in `renderAt`.
 - Sizing uses `--u` (1% of the short viewport side). `--uw` (inside `.win`) and `--ue` (end card) apply per-format multipliers set in JS. Layout differences between formats are `.fmt-<format>` CSS rules.
 - The `edit` story positions its cursor from `getBoundingClientRect()` of target words, so layout changes move the cursor path automatically. `.fix` widths are measured once after `document.fonts.ready`.
+- Voiceover: `vo/<id>.wav` clips are placed by `vo/timeline.json` (start `at`, optional `tempo`). Per story, `hold` freezes the finished demo before the outro and `dur` sets the total length; both pass to `ad.html` as URL params, and `renderAt` remaps time so the demo is unchanged. With no params the page behaves exactly as the silent 15 s cut.
 - `render.cjs` loads the page in Playwright, steps `renderAt(i/fps)`, pipes JPEG screenshots into `ffmpeg` (libx264, CRF 18) and also writes demo/end PNG stills. Output: `marketing/msubs/out/`.
 
 ## Commands
@@ -30,6 +31,7 @@ There is no build system, package.json, linter or test suite.
 ```bash
 node marketing/msubs/render.cjs                 # all 9 videos + 18 stills (several minutes)
 node marketing/msubs/render.cjs edit            # one story, all formats
+node marketing/msubs/render.cjs --vo            # voiced cuts -> out/video-vo/, using vo/timeline.json
 node marketing/msubs/render.cjs --cta "Book a demo" --url "infoesearch.com/msubs"
 ```
 

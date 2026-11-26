@@ -12,6 +12,8 @@
     url    = text shown under the CTA     (default "msubs.in · 30 free minutes")
     cta    = CTA button label             (default "Start free trial")
     t      = freeze at this second (for stills); omit to loop in real time
+    hold   = seconds to hold the finished demo before the outro (default 0)
+    dur    = total length in seconds (default 15 + hold)
   render.cjs drives window.renderAt(t) frame by frame, so every frame is a
   pure function of t — never use CSS transitions or Date.now() for motion.
 -->
@@ -188,7 +190,9 @@ const Q = new URLSearchParams(location.search);
 const STORY = Q.get('story') || 'file';
 const W = innerWidth, H = innerHeight;
 const FORMAT = Q.get('format') || (W/H > 1.3 ? 'landscape' : W/H < .8 ? 'story' : 'square');
-const DUR = 15;
+// hold: extra seconds the finished demo is held before the outro; dur: total length (voiceover cuts run longer)
+const HOLD = parseFloat(Q.get('hold') || 0);
+const DUR = parseFloat(Q.get('dur') || 15 + HOLD);
 document.getElementById('stage').className = 'fmt-' + FORMAT;
 const U = Math.min(W, H) / 100;
 document.documentElement.style.setProperty('--u', U + 'px');
@@ -421,7 +425,8 @@ if (STORY === 'edit') {
 }
 
 const measure = () => $$('.fix').forEach(el => { el._w0 = el.querySelector('.old').getBoundingClientRect().width; el._w1 = el.querySelector('.new').getBoundingClientRect().width; });
-window.renderAt = function (t) {
+window.renderAt = function (T) {
+  const t = T < 11.4 ? T : T < 11.4 + HOLD ? 11.4 : T - HOLD;   // story time
   // intro: copy rises, window slides in
   rise($('.brand'), seg(t, 0, .6), 2);
   rise($('#kicker'), seg(t, .1, .7), 2);
@@ -439,7 +444,7 @@ window.renderAt = function (t) {
   const en = $('#end');
   en.style.opacity = ep;
   [...en.children].forEach((c, i) => rise(c, seg(t, 11.9 + i*.15, 12.5 + i*.15), 3));
-  const pulse = t > 13.2 ? 1 + .04 * Math.sin((t - 13.2) * 5) : 1;
+  const pulse = t > 13.2 ? 1 + .04 * Math.sin((T - HOLD - 13.2) * 5) : 1;
   $('#cta').style.transform += ` scale(${pulse})`;
   if (STORY === 'edit') ['#cursor','.hand','#ripple'].forEach(s => { if (ep > 0) $(s).style.opacity = 0; });
 };
