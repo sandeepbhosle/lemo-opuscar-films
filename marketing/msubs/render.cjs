@@ -14,7 +14,7 @@ const URL_TEXT = opt('url', '');
 const CTA = opt('cta', '');
 const STORIES = args.length ? args : ['file', 'live', 'edit'];
 const FORMATS = { landscape: [1920, 1080], square: [1080, 1080], story: [1080, 1920] };
-const DEMO_T = { file: 9.8, live: 8.6, edit: 10.4 };   // still frame showing the product
+const DEMO_T = { file: 11.0, live: 8.6, edit: 10.4 };   // still frame showing the product
 const END_T = 14;
 
 const dir = __dirname;

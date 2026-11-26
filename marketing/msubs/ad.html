@@ -3,23 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>mSubs Ad</title>
+<title>mSUBS Ad</title>
 <!--
-  mSubs by Infoesearch — animated ad creative.
+  mSUBS by Infoesearch — animated ad creative.
   One file renders every story x format. Query params:
     story  = file | live | edit           (default file)
     format = landscape | square | story   (default: from window size)
-    url    = text shown under the CTA on the end card (optional)
-    cta    = CTA button label             (default "Book a demo")
+    url    = text shown under the CTA     (default "msubs.in · 30 free minutes")
+    cta    = CTA button label             (default "Start free trial")
     t      = freeze at this second (for stills); omit to loop in real time
-  render.mjs drives window.renderAt(t) frame by frame, so every frame is a
+  render.cjs drives window.renderAt(t) frame by frame, so every frame is a
   pure function of t — never use CSS transitions or Date.now() for motion.
 -->
 <style>
   :root{
-    --bg:#0A0F1F; --bg2:#121A33; --panel:#151E3A; --line:#26325A;
-    --ink:#F4F6FF; --mute:#9AA6CC; --ai:#7C5CFF; --ai2:#4F8BFF;
-    --human:#FFB547; --ok:#2FD3A0; --live:#FF4D5E;
+    /* brand: logo navy #06264D, purple #775BC9, blue #2A80ED, teal #08C1B9, outline #A1E1FF */
+    --bg:#03162E; --line:#1C3A63;
+    --ink:#F2F8FF; --mute:#93ABCF; --ai:#8A6FE0; --ai2:#2A80ED; --sky:#A1E1FF;
+    --human:#FFB547; --ok:#08C1B9; --live:#FF4D5E;
     --u:10px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -28,8 +29,8 @@
   .mono{font-family:"JetBrains Mono",ui-monospace,monospace}
 
   #stage{position:relative;width:100vw;height:100vh;overflow:hidden;
-    background:radial-gradient(120% 90% at 85% 10%,#1F2A5C 0%,transparent 55%),
-               radial-gradient(90% 80% at 0% 100%,#2A1B5E 0%,transparent 55%),var(--bg)}
+    background:radial-gradient(120% 90% at 85% 10%,#0D3B70 0%,transparent 55%),
+               radial-gradient(90% 80% at 0% 100%,#2C2366 0%,transparent 55%),var(--bg)}
   .grid-bg{position:absolute;inset:0;opacity:.18;
     background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
     background-size:calc(var(--u)*6) calc(var(--u)*6);
@@ -43,20 +44,16 @@
 
   .brand{display:flex;align-items:center;gap:calc(var(--u)*1.4);font-weight:700;font-size:calc(var(--u)*3)}
   .brand small{font-weight:500;color:var(--mute);font-size:.62em}
-  .logo{width:calc(var(--u)*5);height:calc(var(--u)*5);border-radius:calc(var(--u)*1.3);
-    background:linear-gradient(135deg,var(--ai),var(--ai2));display:grid;place-items:center;position:relative;flex:none}
-  .logo i{position:absolute;left:22%;height:9%;border-radius:9px;background:#fff}
-  .logo i:nth-child(1){top:58%;width:56%}
-  .logo i:nth-child(2){top:74%;width:38%;opacity:.7}
-  .logo b{position:absolute;top:14%;left:22%;font-size:calc(var(--u)*2.2);font-weight:800;line-height:1}
+  .logo{height:calc(var(--u)*5.8);width:auto;display:block;flex:none}
+  .ie{height:calc(var(--u)*1.55);width:auto;display:inline-block;vertical-align:middle}
 
   .copy{display:flex;flex-direction:column;gap:calc(var(--u)*3)}
-  .kicker{font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:calc(var(--u)*1.9);color:var(--ai2)}
+  .kicker{font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:calc(var(--u)*1.9);color:var(--sky)}
   .hl{font-weight:800;line-height:1.02;letter-spacing:-.025em;font-size:calc(var(--u)*7.4)}
   .fmt-square .hl{font-size:calc(var(--u)*6.4)}
   .fmt-story .hl{font-size:calc(var(--u)*8.6)}
   .hl span{display:inline-block}
-  .hl em{font-style:normal;background:linear-gradient(90deg,var(--ai),var(--ai2));-webkit-background-clip:text;color:transparent}
+  .hl em{font-style:normal;background:linear-gradient(90deg,#A48BFF,#4FA3FF 55%,#2FD8CF);-webkit-background-clip:text;color:transparent}
   .hl em.h{background:linear-gradient(90deg,var(--human),#FF7A59);-webkit-background-clip:text}
   .sub{color:var(--mute);font-size:calc(var(--u)*2.6);line-height:1.35;max-width:36ch}
   .fmt-square .sub{display:none}
@@ -68,7 +65,7 @@
   .fmt-story .footnote{display:block}
 
   /* ---------- device window ---------- */
-  .win{position:relative;background:linear-gradient(180deg,#18224A,#111a36);border:1px solid var(--line);
+  .win{position:relative;background:linear-gradient(180deg,#0B2A52,#06203F);border:1px solid var(--line);
     border-radius:calc(var(--u)*2.2);box-shadow:0 calc(var(--u)*4) calc(var(--u)*10) rgba(0,0,0,.55);
     overflow:hidden;align-self:stretch;display:flex;flex-direction:column;min-height:0}
   .fmt-landscape .win{height:80%;align-self:center}
@@ -76,33 +73,33 @@
   #end{--u:var(--ue)}
   .bar{display:flex;align-items:center;gap:calc(var(--u)*1);padding:calc(var(--u)*1.6) calc(var(--u)*2.2);
     border-bottom:1px solid var(--line);font-size:calc(var(--u)*1.8);color:var(--mute)}
-  .bar .d{width:calc(var(--u)*1.1);height:calc(var(--u)*1.1);border-radius:50%;background:#2B3766}
+  .bar .d{width:calc(var(--u)*1.1);height:calc(var(--u)*1.1);border-radius:50%;background:#1E4170}
   .bar .t{margin-left:calc(var(--u)*1);font-weight:600;color:var(--ink)}
   .bar .r{margin-left:auto;display:flex;gap:calc(var(--u)*1);align-items:center}
   .body{position:relative;flex:1;padding:calc(var(--u)*2.6);min-height:0}
   .layer{position:absolute;inset:calc(var(--u)*2.6);display:flex;flex-direction:column;gap:calc(var(--u)*1.8)}
 
   .pill{display:inline-flex;align-items:center;gap:.5em;padding:.4em .9em;border-radius:99px;font-weight:600;
-    font-size:calc(var(--u)*1.7);background:#202B55;color:var(--ink);white-space:nowrap}
-  .pill.ai{background:rgba(124,92,255,.18);color:#BFAFFF}
-  .pill.ok{background:rgba(47,211,160,.16);color:var(--ok)}
+    font-size:calc(var(--u)*1.7);background:#123259;color:var(--ink);white-space:nowrap}
+  .pill.ai{background:rgba(138,111,224,.2);color:#CBBDFF}
+  .pill.ok{background:rgba(8,193,185,.16);color:#3FE0D8}
   .pill.hu{background:rgba(255,181,71,.16);color:var(--human)}
   .pill.live{background:var(--live);color:#fff}
 
   /* file story */
-  .drop{border:2px dashed #34427A;border-radius:calc(var(--u)*1.6);padding:calc(var(--u)*2.2);display:flex;align-items:center;gap:calc(var(--u)*2)}
+  .drop{border:2px dashed #2A5288;border-radius:calc(var(--u)*1.6);padding:calc(var(--u)*2.2);display:flex;align-items:center;gap:calc(var(--u)*2)}
   .fileic{width:calc(var(--u)*6);height:calc(var(--u)*7);border-radius:calc(var(--u)*.9);background:linear-gradient(135deg,#3A4A8C,#25305E);
     display:grid;place-items:center;font-size:calc(var(--u)*1.5);font-weight:700;flex:none}
   .fname{font-weight:700;font-size:calc(var(--u)*2.3)}
   .fmeta{color:var(--mute);font-size:calc(var(--u)*1.7);margin-top:.3em}
   .step{display:grid;grid-template-columns:calc(var(--u)*3.4) 1fr auto;align-items:center;gap:calc(var(--u)*1.4);
     font-size:calc(var(--u)*2.1);font-weight:600}
-  .step .ic{width:calc(var(--u)*3.4);height:calc(var(--u)*3.4);border-radius:50%;border:2px solid #34427A;display:grid;place-items:center;font-size:calc(var(--u)*1.7)}
-  .step .trk{grid-column:2/4;height:calc(var(--u)*.9);border-radius:99px;background:#222C55;overflow:hidden}
-  .step .fill{height:100%;width:0;background:linear-gradient(90deg,var(--ai),var(--ai2));border-radius:99px}
+  .step .ic{width:calc(var(--u)*3.4);height:calc(var(--u)*3.4);border-radius:50%;border:2px solid #2A5288;display:grid;place-items:center;font-size:calc(var(--u)*1.7)}
+  .step .trk{grid-column:2/4;height:calc(var(--u)*.9);border-radius:99px;background:#123259;overflow:hidden}
+  .step .fill{height:100%;width:0;background:linear-gradient(90deg,var(--ai),var(--ai2),var(--ok));border-radius:99px}
   .step .pct{color:var(--mute);font-size:calc(var(--u)*1.7)}
   .cue{display:grid;grid-template-columns:auto 1fr;gap:calc(var(--u)*1.6);align-items:baseline;
-    padding:calc(var(--u)*1.3) calc(var(--u)*1.6);border-radius:calc(var(--u)*1.1);background:#1A2448;font-size:calc(var(--u)*2.1);line-height:1.3}
+    padding:calc(var(--u)*1.3) calc(var(--u)*1.6);border-radius:calc(var(--u)*1.1);background:#0E2C55;font-size:calc(var(--u)*2.1);line-height:1.3}
   .cue .tc{color:var(--ai2);font-size:calc(var(--u)*1.6)}
   .exports{display:flex;flex-wrap:wrap;gap:calc(var(--u)*1.2);margin-top:auto}
   .exports .pill{font-size:calc(var(--u)*1.9);padding:.55em 1.1em}
@@ -116,10 +113,11 @@
   .dot{width:.7em;height:.7em;border-radius:50%;background:#fff}
   .caps{position:absolute;left:6%;right:6%;bottom:calc(var(--u)*3);text-align:center;font-weight:700;
     font-size:calc(var(--u)*2.9);line-height:1.35}
-  .fmt-story .caps{font-size:calc(var(--u)*3.4)}
+  .fmt-story .caps{font-size:calc(var(--u)*2.6)}
   .caps .ln{display:inline;background:rgba(5,8,20,.82);padding:.1em .35em;border-radius:.25em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
   .caps .w{opacity:0}
-  .caps .w.new{color:#C9BDFF}
+  .caps .w.new{color:var(--sky)}
+  .caps .tr{color:#7FF0E9;font-weight:600;font-size:.78em}
   .wave{display:flex;align-items:center;gap:calc(var(--u)*.5);height:calc(var(--u)*6)}
   .wave i{flex:1;border-radius:99px;background:linear-gradient(180deg,var(--ai2),var(--ai))}
   .livefoot{display:flex;align-items:center;gap:calc(var(--u)*1.6)}
@@ -133,9 +131,9 @@
   .ehead .lbl small{display:block;color:var(--mute);font-weight:500;font-size:.78em;margin-top:.2em}
   .ehead .pill{margin-left:auto}
   .ecue{display:grid;grid-template-columns:auto 1fr;gap:calc(var(--u)*1.6);align-items:baseline;padding:calc(var(--u)*1.3) calc(var(--u)*1.6);
-    border-radius:calc(var(--u)*1.1);background:#1A2448;font-size:calc(var(--u)*2.1);line-height:1.45}
+    border-radius:calc(var(--u)*1.1);background:#0E2C55;font-size:calc(var(--u)*2.1);line-height:1.45}
   .ecue .tc{color:var(--ai2);font-size:calc(var(--u)*1.6)}
-  .spk{display:inline-block;font-size:.78em;font-weight:700;padding:.08em .45em;border-radius:.35em;background:#2A3566;margin-right:.35em}
+  .spk{display:inline-block;font-size:.78em;font-weight:700;padding:.08em .45em;border-radius:.35em;background:#1A3D6B;margin-right:.35em}
   .fix{position:relative;white-space:nowrap;display:inline-block;vertical-align:bottom;text-align:left}
   .fix .old{display:inline-block}
   .fix .old{border-radius:.25em;padding:0 .12em}
@@ -150,8 +148,8 @@
   #end{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*3);
     text-align:center;opacity:0;padding:calc(var(--u)*6);
     background:radial-gradient(70% 60% at 50% 40%,#25307A 0%,var(--bg) 75%)}
-  #end .logo{width:calc(var(--u)*13);height:calc(var(--u)*13);border-radius:calc(var(--u)*3.2)}
-  #end .logo b{font-size:calc(var(--u)*5.6)}
+  #end .logo{height:calc(var(--u)*17)}
+  #end .ie{height:calc(var(--u)*2.6);margin-left:.3em}
   #end h2{font-size:calc(var(--u)*8);font-weight:800;letter-spacing:-.03em;line-height:1}
   #end h2 small{display:block;font-size:.34em;font-weight:500;color:var(--mute);letter-spacing:0;margin-top:.5em}
   #end .tag{font-size:calc(var(--u)*3.2);font-weight:600;max-width:26ch;line-height:1.25}
@@ -165,7 +163,7 @@
   <div class="grid-bg"></div>
   <div id="main">
     <div class="copy">
-      <div class="brand"><div class="logo"><b>m</b><i></i><i></i></div>mSubs <small>by Infoesearch</small></div>
+      <div class="brand"><img class="logo" src="assets/msubs-logo.png" alt="">mSUBS <small>by</small><img class="ie" src="assets/infoesearch-logo-white.png" alt="Infoesearch"></div>
       <div class="kicker" id="kicker"></div>
       <h1 class="hl" id="hl"></h1>
       <p class="sub" id="sub"></p>
@@ -174,13 +172,13 @@
     <div class="footnote" id="foot"></div>
   </div>
   <div id="end">
-    <div class="logo"><b>m</b><i></i><i></i></div>
-    <h2>mSubs<small>by Infoesearch</small></h2>
+    <img class="logo" src="assets/msubs-logo.png" alt="">
+    <h2>mSUBS<small>by<img class="ie" src="assets/infoesearch-logo-white.png" alt="Infoesearch"></small></h2>
     <div class="tag" id="endtag"></div>
     <div class="feat">
-      <span class="pill ai">File Subs</span><span class="pill live">Live Subs</span><span class="pill hu">Human edit</span>
+      <span class="pill ai">File Subs</span><span class="pill live">Live Subs</span><span class="pill hu">Human edit</span><span class="pill ok">100+ languages</span>
     </div>
-    <div class="cta" id="cta">Book a demo</div>
+    <div class="cta" id="cta">Start free trial</div>
     <div class="url" id="url"></div>
   </div>
 </div>
@@ -197,7 +195,7 @@ document.documentElement.style.setProperty('--u', U + 'px');
 document.documentElement.style.setProperty('--uw', U * ({landscape: 1.18, square: 1, story: 1.3}[FORMAT]) + 'px');
 document.documentElement.style.setProperty('--ue', U * ({landscape: .95, square: 1, story: 1.25}[FORMAT]) + 'px');
 if (Q.get('cta')) document.getElementById('cta').textContent = Q.get('cta');
-document.getElementById('url').textContent = Q.get('url') || '';
+document.getElementById('url').textContent = Q.has('url') ? Q.get('url') : 'msubs.in · 30 free minutes to try';
 
 // ---------- time helpers ----------
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
@@ -215,9 +213,9 @@ const STORIES = {
   file: {
     kicker: 'File Subs',
     hl: 'Drop a video.<br><em>Get subtitles.</em>',
-    sub: 'Upload any recording and mSubs transcribes, times and formats every line, ready to export.',
-    foot: 'Interviews · Courses · Ads · Films',
-    endtag: 'Subtitles for every file, without the busywork.',
+    sub: 'Drop any video or audio file. mSUBS transcribes, times and translates it into 100+ languages, ready to export.',
+    foot: 'Films · Music · News · Courses',
+    endtag: 'Subtitles in 100+ languages, from any file.',
     win: `
       <div class="bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="t">File Subs</span>
         <span class="r"><span class="pill ai" id="fstate">Waiting for file</span></span></div>
@@ -225,9 +223,9 @@ const STORIES = {
         <div class="layer" id="L1">
           <div class="drop" id="drop">
             <div class="fileic mono" id="fic">MP4</div>
-            <div><div class="fname">product-launch.mp4</div><div class="fmeta mono">12:48 · 1080p · English</div></div>
+            <div><div class="fname">product-launch.mp4</div><div class="fmeta mono">12:48 · English, auto-detected</div></div>
           </div>
-          ${['Transcribing speech','Syncing timecodes','Splitting into readable lines'].map((s,i)=>`
+          ${['Transcribing speech','Syncing timecodes','Translating · ES · HI · AR'].map((s,i)=>`
           <div class="step" data-i="${i}"><div class="ic">${i+1}</div><div>${s}</div><div class="pct mono">0%</div>
             <div class="trk"><div class="fill"></div></div></div>`).join('')}
         </div>
@@ -237,7 +235,7 @@ const STORIES = {
             .map(([tc,tx])=>`<div class="cue"><span class="tc mono">${tc}</span><span>${tx}</span></div>`).join('')}
           <div class="exports">
             <span class="pill ok">✓ Ready</span><span class="pill mono">.SRT</span><span class="pill mono">.VTT</span>
-            <span class="pill mono">.TXT</span><span class="pill">Burned-in MP4</span>
+            <span class="pill mono">.SCC</span><span class="pill mono">.TTML</span><span class="pill">Burned-in</span>
           </div>
         </div>
       </div>`,
@@ -245,7 +243,7 @@ const STORIES = {
       const drop = $('#drop'), fic = $('#fic');
       const pin = eo(seg(t, 2.0, 2.9));
       drop.style.opacity = pin; drop.style.transform = `translateY(${(1-pin)*-6}vmin)`;
-      drop.style.borderColor = t > 2.9 && t < 3.6 ? 'var(--ai)' : '#34427A';
+      drop.style.borderColor = t > 2.9 && t < 3.6 ? 'var(--ai)' : '#2A5288';
       fic.style.background = t > 3.2 ? 'linear-gradient(135deg,var(--ai),var(--ai2))' : '';
       const ranges = [[3.2, 5.0], [4.3, 6.0], [5.3, 6.9]];
       $$('.step').forEach((el, i) => {
@@ -272,24 +270,24 @@ const STORIES = {
   live: {
     kicker: 'Live Subs',
     hl: 'Captions<br><em>as you speak.</em>',
-    sub: 'Stream, webinar or town hall: mSubs captions every word live, so nobody misses a moment.',
-    foot: 'Webinars · Events · Broadcasts · Classes',
-    endtag: 'Live captions for every stream and event.',
-    words: 'Welcome everyone to today’s product launch. We’re streaming to teams around the world, and every word is captioned the moment it’s spoken.'.split(' '),
+    sub: 'Send your stream from OBS, vMix, Larix, RTMP or HLS. mSUBS captions it within seconds and translates it live.',
+    foot: 'News · Sport · Events · Assemblies',
+    endtag: 'Live captions within seconds, translated as you stream.',
+    words: 'Welcome everyone to today’s product launch. We’re streaming to teams around the world, and every word is captioned within seconds.'.split(' '),
     win: `
       <div class="bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="t">Live Subs</span>
-        <span class="r"><span class="pill ok" id="lstate">● Connected</span></span></div>
+        <span class="r"><span class="pill ok" id="lstate">● OBS · RTMP</span></span></div>
       <div class="body"><div class="layer">
         <div class="video">
           <svg class="person" viewBox="0 0 200 220"><defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stop-color="#5B63C9"/><stop offset="1" stop-color="#2B2F6B"/></linearGradient></defs>
             <circle cx="100" cy="70" r="42" fill="url(#pg)"/><path d="M20 220c0-55 36-90 80-90s80 35 80 90z" fill="url(#pg)"/></svg>
           <div class="vtop"><span class="pill live"><span class="dot" id="ldot"></span>LIVE</span>
-            <span class="pill mono" id="ltime">00:00:00</span><span class="pill ai r">CC · English</span></div>
+            <span class="pill mono" id="ltime">00:00:00</span><span class="pill ai r" id="cc">CC · EN</span></div>
           <div class="caps" id="caps"></div>
         </div>
         <div class="livefoot"><div class="wave" id="wave" style="flex:1">${'<i></i>'.repeat(40)}</div>
-          <span class="pill ai">Real-time</span></div>
+          <span class="pill hu" id="hold">Editor review · on</span><span class="pill ai">Live · ES</span></div>
       </div></div>`,
     render(t) {
       const S = STORIES.live;
@@ -311,15 +309,21 @@ const STORIES = {
         const idx = start + li*per + wi;
         return `<span class="w${idx >= n - 2 ? ' new' : ''}" style="opacity:1">${w}</span>`;
       }).join(' ') + '</span>').join('<br>');
+      // live translation follows each finished sentence
+      const ES = [[5.3, 'ES · Bienvenidos al lanzamiento de hoy.'],
+                  [9.7, 'ES · Transmitimos al mundo, con subtítulos en segundos.']];
+      const tr = ES.filter(([at]) => t >= at).pop();
+      if (tr) $('#caps').innerHTML += `<br><span class="ln tr" style="opacity:${seg(t, tr[0], tr[0] + .4)}">${tr[1]}</span>`;
+      $('#cc').textContent = t >= 5.3 ? 'CC · EN + ES' : 'CC · EN';
     }
   },
 
   edit: {
     kicker: 'Human edit',
     hl: 'AI does <em>90%.</em><br>Your team makes it <em class="h">100%.</em>',
-    sub: 'mSubs drafts every subtitle, then flags the words it’s unsure of so your editors can perfect them in seconds.',
-    foot: 'Names · Brand terms · Speakers · Timing',
-    endtag: 'AI speed. Human accuracy. Subtitles you can publish with confidence.',
+    sub: 'AI drafts every subtitle and flags what it’s unsure of. Your editors, or our native linguists, fix names, terms and timing in the online editor.',
+    foot: 'Names · Terms · Speakers · Timing',
+    endtag: 'AI for speed. Human editors for trust.',
     win: `
       <div class="bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="t">Review &amp; edit</span>
         <span class="r"><span class="pill mono">product-launch.srt</span></span></div>
@@ -335,7 +339,7 @@ const STORIES = {
         <div class="ecue"><span class="tc mono">00:00:01</span><span>Welcome to the
           <span class="fix" data-k="0"><span class="old">info search</span><span class="new">Infoesearch</span></span> launch.</span></div>
         <div class="ecue"><span class="tc mono">00:00:04</span><span>Today we’re unveiling
-          <span class="fix" data-k="1"><span class="old">em subs</span><span class="new">mSubs</span></span> for every team.</span></div>
+          <span class="fix" data-k="1"><span class="old">em subs</span><span class="new">mSUBS</span></span> for every team.</span></div>
         <div class="ecue"><span class="tc mono">00:00:08</span><span>Files and live streams, subtitled in minutes.</span></div>
         <div class="ecue"><span class="tc mono">00:00:11</span><span><span class="fix spk" data-k="2"><span class="old">Speaker 2</span><span class="new">Host</span></span>
           And your editors stay in control.</span></div>
@@ -366,7 +370,7 @@ const STORIES = {
         old.style.opacity = 1 - sw;
         nw.style.opacity = sw; nw.style.transform = `translateY(${(1-eo(sw))*-.6}em)`;
         el.style.width = lerp(el._w0, el._w1, eio(sw)) + 'px';
-        if (el.classList.contains('spk')) el.style.background = sw ? `rgba(47,211,160,${.2*sw})` : '#2A3566';
+        if (el.classList.contains('spk')) el.style.background = sw ? `rgba(47,211,160,${.2*sw})` : '#1A3D6B';
       });
       const ap = $('#approve');
       ap.style.opacity = .35 + .65 * seg(t, 8.6, 9.0);
