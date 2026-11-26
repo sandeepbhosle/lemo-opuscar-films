@@ -47,7 +47,7 @@ Use `*-square.mp4` for feed and `*-story.mp4` for Reels and Stories.
 ### Human edit
 - **Primary text:** Fully automatic subtitles still get names and brand terms wrong. mSUBS does 90% of the work with AI and flags what it's unsure of. Your editors (or our native linguists) fix it in the online editor before you publish. Even on live streams, an editor can correct a line before it airs.
 - **Headline:** AI does 90%. You make it 100%.
-- **Description:** AI for speed. Human editors for trust.
+- **Description:** AI for speed. Human for trust.
 - **CTA button:** Sign up
 
 ---

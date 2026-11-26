@@ -27,6 +27,11 @@ const TIMELINE = VO ? JSON.parse(fs.readFileSync(path.join(dir, 'vo', 'timeline.
 for (const d of VO ? ['video-vo', 'audio'] : ['video', 'stills']) fs.mkdirSync(path.join(OUT, d), { recursive: true });
 
 // Mix one story's voice lines into a single track the length of the video, loudness-normalised for social (-16 LUFS).
+// If vo/music.wav exists it goes underneath: faded in/out, kept well below the voice and ducked further
+// (sidechain) while someone speaks. Music level relative to the voice: MUSIC_DB (more negative = quieter).
+const MUSIC = path.join(dir, 'vo', 'music.wav');
+const MUSIC_DB = -15;
+const MUSIC_LEN = fs.existsSync(MUSIC) ? +execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', MUSIC]).toString() : 0;
 function mixVoice(story) {
   const tl = TIMELINE[story];
   const wav = path.join(OUT, 'audio', `${story}-vo.wav`);
@@ -35,9 +40,23 @@ function mixVoice(story) {
     const ms = Math.round(l.at * 1000);
     return `[${i}:a]${l.tempo ? `atempo=${l.tempo},` : ''}adelay=${ms}|${ms}[a${i}]`;
   });
-  const mix = tl.lines.map((_, i) => `[a${i}]`).join('') +
-    `amix=inputs=${tl.lines.length}:normalize=0,apad,atrim=0:${tl.dur},loudnorm=I=-16:TP=-1.5:LRA=11,aresample=48000[out]`;
-  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', ...inputs, '-filter_complex', [...chains, mix].join(';'),
+  const voice = tl.lines.map((_, i) => `[a${i}]`).join('') +
+    `amix=inputs=${tl.lines.length}:normalize=0,apad,atrim=0:${tl.dur},loudnorm=I=-16:TP=-2:LRA=11,aresample=48000`;
+  let graph;
+  if (fs.existsSync(MUSIC)) {
+    inputs.push('-i', MUSIC);
+    const m = tl.lines.length;
+    graph = [...chains, `${voice},asplit[v][key]`,
+      // start the music late enough that its final chord lands on the video's last frame
+      `[${m}:a]aformat=channel_layouts=stereo,loudnorm=I=${-16 + MUSIC_DB}:TP=-2,aresample=48000,` +
+        `atrim=start=${Math.max(0, MUSIC_LEN - tl.dur).toFixed(2)},asetpts=PTS-STARTPTS,apad,atrim=0:${tl.dur},` +
+        `afade=t=in:d=0.6,afade=t=out:st=${(tl.dur - 0.4).toFixed(2)}:d=0.4[m]`,
+      `[m][key]sidechaincompress=threshold=0.02:ratio=6:attack=15:release=350[md]`,
+      `[v][md]amix=inputs=2:normalize=0,alimiter=limit=0.79,aresample=48000[out]`];
+  } else {
+    graph = [...chains, `${voice}[out]`];
+  }
+  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', ...inputs, '-filter_complex', graph.join(';'),
     '-map', '[out]', '-ac', '2', '-ar', '48000', wav]);
   return wav;
 }

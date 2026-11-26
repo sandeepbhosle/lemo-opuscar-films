@@ -19,7 +19,7 @@ Each video is 15 seconds: about 12 s of product demo, then an end card with the 
 | `out/video/<story>-<format>.mp4` | 9 videos: 3 stories × landscape 1920×1080, square 1080×1080, story 1080×1920 |
 | `out/stills/<story>-<format>-{demo,end}.png` | 18 static ads: a product frame and the end card for each video |
 | `out/video-vo/<story>-<format>.mp4` | The same 9 videos with a voiceover (File 17.7 s, Live 16.4 s, Human edit 17.9 s; the end card runs longer to fit the last line) |
-| `out/audio/<story>-vo.wav` | Each story's voice track on its own, for editors |
+| `out/audio/<story>-vo.wav` | Each story's finished soundtrack (voice + music), for editors |
 | `vo/` | The 12 voice lines (`lines.tsv` has their text; `.mp3` as generated, `.wav` silence-trimmed) and `timeline.json`, which places each line on the video timeline |
 
 Colours come from the logo: navy #06264D, purple #775BC9, blue #2A80ED, teal #08C1B9, light blue #A1E1FF. They're defined as CSS variables at the top of `ad.html`.
@@ -44,7 +44,9 @@ Re-render the voiced videos after changing `timeline.json` or replacing a `vo/<i
 node marketing/msubs/render.cjs --vo
 ```
 
-Each story's track is mixed to −16 LUFS (peaks −1.5 dB), which suits Meta, LinkedIn and YouTube. Use the silent 15 s cuts in `out/video/` for YouTube non-skippable (15 s max) and for placements that autoplay muted.
+Background music: `vo/music.wav`, a 20 s instrumental generated with ElevenLabs Music (`eleven_music_v2_5`). Each video starts the music late enough that its final chord lands on the last frame. It sits about 9–10 dB under the voice and dips further while someone speaks (sidechain ducking). Change `MUSIC_DB` in `render.cjs` to make it louder or quieter, or delete `vo/music.wav` for voice only.
+
+The finished mix is about −15 LUFS with peaks under −1 dB, which suits Meta, LinkedIn and YouTube. Use the silent 15 s cuts in `out/video/` for YouTube non-skippable (15 s max) and for placements that autoplay muted.
 
 ## Claims check
 
