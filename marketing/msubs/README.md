@@ -18,7 +18,7 @@ Each video is 15 seconds: about 12 s of product demo, then an end card with the 
 | `assets/` | mSUBS logo (from the msubs.in favicon) and the Infoesearch wordmark, plus a white version for dark backgrounds |
 | `out/video/<story>-<format>.mp4` | 9 videos: 3 stories × landscape 1920×1080, square 1080×1080, story 1080×1920 |
 | `out/stills/<story>-<format>-{demo,end}.png` | 18 static ads: a product frame and the end card for each video |
-| `out/video-vo/<story>-<format>.mp4` | The same 9 videos with a voiceover (File 17.2 s, Live 15.6 s, Human edit 16.8 s; the end card runs longer to fit the last line) |
+| `out/video-vo/<story>-<format>.mp4` | The same 9 videos with a voiceover (File 17.7 s, Live 16.4 s, Human edit 17.9 s; the end card runs longer to fit the last line) |
 | `out/audio/<story>-vo.wav` | Each story's voice track on its own, for editors |
 | `vo/` | The 12 voice lines (`lines.tsv` has their text; `.mp3` as generated, `.wav` silence-trimmed) and `timeline.json`, which places each line on the video timeline |
 
@@ -36,7 +36,7 @@ URL parameters for previewing `ad.html`: `story` (`file|live|edit`), `format` (`
 
 ## Voiceover
 
-Voice: **Douglas** (ElevenLabs library voice, model `eleven_v4`), one take per line, generated in the ElevenLabs flow "mSUBS ad voiceovers". Brand names were given pronunciation hints: mSUBS as "em-subs", Infoesearch as "info-e-search".
+Voice: **Kaanha**, an Indian English commercial voice (ElevenLabs library voice, model `eleven_v4`), one take per line, generated in the ElevenLabs flow "mSUBS ad voiceovers". Brand names were given pronunciation hints: mSUBS as "em-subs", Infoesearch as "info-e-search". Every ad ends on the line "mSUBS, by Infoesearch".
 
 Re-render the voiced videos after changing `timeline.json` or replacing a `vo/<id>.wav`:
 

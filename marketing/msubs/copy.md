@@ -114,25 +114,25 @@ Keyword themes: `ai subtitle generator`, `subtitle translation`, `srt generator`
 
 ## YouTube / CTV: voiceover scripts
 
-The voiced cuts in `out/video-vo/` use these lines, as recorded (start time in seconds):
+The voiced cuts in `out/video-vo/` use these lines, read by Kaanha (an Indian English voice). Each ad ends on "mSUBS, by Infoesearch". Start times are in seconds:
 
-**File Subs (17.2s)**
+**File Subs (17.7s)**
 - 0.3s: "Drop a video."
-- 1.5s: "mSUBS transcribes it, syncs every timecode, and translates it into over a hundred languages."
-- 7.4s: "Export SRT, VTT, SCC, TTML, or burned in."
-- 12.6s: "mSUBS, by Infoesearch. Start free at msubs dot in."
+- 1.4s: "mSUBS transcribes it, syncs every timecode, and translates it into over a hundred languages."
+- 7.3s: "Export SRT, VTT, SCC, TTML, or burned in."
+- 12.75s: "Start free at msubs dot in. mSUBS, by Infoesearch."
 
-**Live Subs (15.6s)**
+**Live Subs (16.4s)**
 - 0.3s: "Going live?"
-- 1.4s: "Send your stream from OBS, vMix, or any RTMP or HLS link."
-- 6.7s: "mSUBS captions every word within seconds, and translates it live."
-- 12.4s: "mSUBS Live Subs, by Infoesearch."
+- 1.35s: "Send your stream from OBS, vMix, or any RTMP or HLS link."
+- 6.85s: "mSUBS captions every word within seconds, and translates it live."
+- 11.9s: "Captions for every stream. mSUBS, by Infoesearch."
 
-**Human edit (16.8s)**
+**Human edit (17.9s)**
 - 0.3s: "AI does ninety percent of the work."
-- 2.8s: "It flags what it isn't sure of: names, terms, speakers. Your editor fixes each one in a click."
-- 9.75s: "Approve, and export."
-- 12.3s: "AI for speed. Humans for trust. mSUBS."
+- 2.5s: "It flags what it isn't sure of: names, terms, speakers. Your editor fixes each one in a click."
+- 9.7s: "Approve, and export."
+- 12.2s: "AI for speed. Humans for trust. mSUBS, by Infoesearch."
 
 For YouTube non-skippable (15 s max) use the silent 15 s cuts in `out/video/`.
 
