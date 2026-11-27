@@ -1,0 +1,72 @@
+{
+  "_doc": "Voiceover placement for the -vo videos. at = start second on the video timeline; tempo = atempo speed-up (1 = none). hold = seconds the finished demo is held before the outro; dur = total video length. Clips are vo/<id>.wav (silence-trimmed takes from ElevenLabs, voice: Kaanha, model eleven_v4). Text of each line is in lines.tsv.",
+  "file": {
+    "hold": 0.8,
+    "dur": 17.7,
+    "lines": [
+      {
+        "id": "file-1",
+        "at": 0.3
+      },
+      {
+        "id": "file-2",
+        "at": 1.4
+      },
+      {
+        "id": "file-3",
+        "at": 7.3,
+        "tempo": 1.2
+      },
+      {
+        "id": "file-4",
+        "at": 12.75,
+        "tempo": 1.05
+      }
+    ]
+  },
+  "live": {
+    "hold": 0,
+    "dur": 16.4,
+    "lines": [
+      {
+        "id": "live-1",
+        "at": 0.3
+      },
+      {
+        "id": "live-2",
+        "at": 1.35
+      },
+      {
+        "id": "live-3",
+        "at": 6.85
+      },
+      {
+        "id": "live-4",
+        "at": 11.9
+      }
+    ]
+  },
+  "edit": {
+    "hold": 0,
+    "dur": 17.9,
+    "lines": [
+      {
+        "id": "edit-1",
+        "at": 0.3
+      },
+      {
+        "id": "edit-2",
+        "at": 2.5
+      },
+      {
+        "id": "edit-3",
+        "at": 9.7
+      },
+      {
+        "id": "edit-4",
+        "at": 12.2,
+        "tempo": 1.08
+      }
+    ]
+  }
+}
