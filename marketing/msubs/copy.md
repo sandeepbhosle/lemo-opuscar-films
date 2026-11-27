@@ -30,7 +30,7 @@ The **90%** figure is your framing of how much of the work the AI does; the webs
 
 ## Meta (Facebook / Instagram): feed, Reels, Stories
 
-Use `*-square.mp4` for feed and `*-story.mp4` for Reels and Stories.
+Use `*-square.mp4` for feed, `*-reels.mp4` for Reels (keeps text clear of the Reels UI) and `*-story.mp4` for Stories.
 
 ### File Subs
 - **Primary text:** Still typing subtitles by hand? Drop any video or audio file into mSUBS and get every line transcribed, timed and translated into 100+ languages. Export SRT, VTT, SCC, TTML or burned-in. Try it free with 30 minutes on us.

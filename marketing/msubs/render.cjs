@@ -1,5 +1,5 @@
 // Renders ad.html into MP4 videos and PNG stills for every story x format.
-// Usage: node marketing/msubs/render.cjs [story ...] [--vo] [--fps 30] [--url text] [--cta text]
+// Usage: node marketing/msubs/render.cjs [story ...] [--vo] [--format reels] [--fps 30] [--url text] [--cta text]
 // Silent:  out/video/<story>-<format>.mp4 (15 s) and out/stills/<story>-<format>-{demo,end}.png
 // --vo:    out/video-vo/<story>-<format>.mp4 with the voiceover from vo/timeline.json
 //          (longer end card per the timeline's hold/dur), plus out/audio/<story>-vo.wav
@@ -16,8 +16,9 @@ const FPS = +opt('fps', 30);
 const URL_TEXT = opt('url', '');
 const CTA = opt('cta', '');
 const VO = flag('vo');
+const ONLY = opt('format', '');   // e.g. --format reels (comma-separated) renders just those formats
 const STORIES = args.length ? args : ['file', 'live', 'edit'];
-const FORMATS = { landscape: [1920, 1080], square: [1080, 1080], story: [1080, 1920] };
+const FORMATS = { landscape: [1920, 1080], square: [1080, 1080], story: [1080, 1920], reels: [1080, 1920] };
 const DEMO_T = { file: 11.0, live: 8.6, edit: 10.4 };   // still frame showing the product
 const END_T = 14;
 
@@ -100,7 +101,8 @@ async function job(browser, story, fmt, audio) {
   const audio = {};
   if (VO) for (const s of STORIES) audio[s] = mixVoice(s);
   const browser = await chromium.launch();
-  const jobs = STORIES.flatMap(s => Object.keys(FORMATS).map(f => [s, f]));
+  const fmts = ONLY ? ONLY.split(',') : Object.keys(FORMATS);
+  const jobs = STORIES.flatMap(s => fmts.map(f => [s, f]));
   const workers = Array.from({ length: 3 }, async () => {
     while (jobs.length) { const [s, f] = jobs.shift(); await job(browser, s, f, audio[s]); }
   });

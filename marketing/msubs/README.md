@@ -18,6 +18,7 @@ Each video is 15 seconds: about 12 s of product demo, then an end card with the 
 | `assets/` | mSUBS logo (from the msubs.in favicon) and the Infoesearch wordmark, plus a white version for dark backgrounds |
 | `out/video/<story>-<format>.mp4` | 9 videos: 3 stories × landscape 1920×1080, square 1080×1080, story 1080×1920 |
 | `out/stills/<story>-<format>-{demo,end}.png` | 18 static ads: a product frame and the end card for each video |
+| `out/video/<story>-reels.mp4`, `out/video-vo/<story>-reels.mp4` | Instagram/Facebook Reels cuts (1080×1920), silent and voiced. Text and logos stay inside Meta's Reels safe zone (clear of the top 14%, bottom 35% and 6% each side), where the Reels UI doesn't cover them. `out/stills/reels-safe-zone-check.png` shows the zones in red |
 | `out/video-vo/<story>-<format>.mp4` | The same 9 videos with a voiceover (File 17.7 s, Live 16.4 s, Human edit 17.9 s; the end card runs longer to fit the last line) |
 | `out/audio/<story>-vo.wav` | Each story's finished soundtrack (voice + music), for editors |
 | `vo/` | The 12 voice lines (`lines.tsv` has their text; `.mp3` as generated, `.wav` silence-trimmed) and `timeline.json`, which places each line on the video timeline |
@@ -32,7 +33,7 @@ node marketing/msubs/render.cjs
 
 List stories to render only those (`node marketing/msubs/render.cjs edit`). `--cta "Book a demo"` changes the button text, `--url "infoesearch.com/msubs"` replaces the line under it, and `--fps 60` raises the frame rate. All 9 videos take about 2½ minutes. It needs Node with Playwright and Chromium, `ffmpeg`, and the Inter and JetBrains Mono fonts.
 
-URL parameters for previewing `ad.html`: `story` (`file|live|edit`), `format` (`landscape|square|story`), `t` (freeze at a second), `url`, `cta`.
+URL parameters for previewing `ad.html`: `story` (`file|live|edit`), `format` (`landscape|square|story|reels`), `t` (freeze at a second), `url`, `cta`, `safe=1` (tint the Reels UI zones red). `--format reels` renders only the given format(s).
 
 ## Voiceover
 

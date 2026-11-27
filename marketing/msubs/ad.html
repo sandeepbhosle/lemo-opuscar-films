@@ -8,10 +8,11 @@
   mSUBS by Infoesearch — animated ad creative.
   One file renders every story x format. Query params:
     story  = file | live | edit           (default file)
-    format = landscape | square | story   (default: from window size)
+    format = landscape | square | story | reels   (default: from window size)
     url    = text shown under the CTA     (default "msubs.in · 30 free minutes")
     cta    = CTA button label             (default "Start free trial")
     t      = freeze at this second (for stills); omit to loop in real time
+    safe   = 1 tints the Reels UI zones red (top 14%, bottom 35%, sides 6%) to check placement
     hold   = seconds to hold the finished demo before the outro (default 0)
     dur    = total length in seconds (default 15 + hold)
   render.cjs drives window.renderAt(t) frame by frame, so every frame is a
@@ -42,6 +43,9 @@
   #main{position:absolute;inset:0;display:grid;padding:calc(var(--u)*6)}
   .fmt-landscape #main{grid-template-columns:40% 1fr;gap:calc(var(--u)*6);align-items:center}
   .fmt-square #main{grid-template-rows:auto 1fr;gap:calc(var(--u)*4)}
+  .fmt-reels #main{padding:calc(14vh + var(--u)*1.5) calc(6vw + var(--u)*1.5) calc(35vh + var(--u)*1.5)}
+  .fmt-reels #end{padding:14vh 6vw 35vh}
+  .safe{position:absolute;background:rgba(255,40,60,.28);z-index:50;pointer-events:none;outline:2px dashed #ff4d5e}
   .fmt-story #main{grid-template-rows:auto 1fr auto;gap:calc(var(--u)*5);padding:calc(var(--u)*8) calc(var(--u)*6)}
 
   .brand{display:flex;align-items:center;gap:calc(var(--u)*1.4);font-weight:700;font-size:calc(var(--u)*3)}
@@ -193,11 +197,11 @@ const FORMAT = Q.get('format') || (W/H > 1.3 ? 'landscape' : W/H < .8 ? 'story' 
 // hold: extra seconds the finished demo is held before the outro; dur: total length (voiceover cuts run longer)
 const HOLD = parseFloat(Q.get('hold') || 0);
 const DUR = parseFloat(Q.get('dur') || 15 + HOLD);
-document.getElementById('stage').className = 'fmt-' + FORMAT;
-const U = Math.min(W, H) / 100;
+document.getElementById('stage').className = FORMAT === 'reels' ? 'fmt-square fmt-reels' : 'fmt-' + FORMAT;
+const U = (FORMAT === 'reels' ? Math.min(W * .88, H * .51) : Math.min(W, H)) / 100;
 document.documentElement.style.setProperty('--u', U + 'px');
-document.documentElement.style.setProperty('--uw', U * ({landscape: 1.18, square: 1, story: 1.3}[FORMAT]) + 'px');
-document.documentElement.style.setProperty('--ue', U * ({landscape: .95, square: 1, story: 1.25}[FORMAT]) + 'px');
+document.documentElement.style.setProperty('--uw', U * ({landscape: 1.18, square: 1, story: 1.3, reels: 1}[FORMAT]) + 'px');
+document.documentElement.style.setProperty('--ue', U * ({landscape: .95, square: 1, story: 1.25, reels: 1}[FORMAT]) + 'px');
 if (Q.get('cta')) document.getElementById('cta').textContent = Q.get('cta');
 document.getElementById('url').textContent = Q.has('url') ? Q.get('url') : 'msubs.in · 30 free minutes to try';
 
@@ -450,6 +454,9 @@ window.renderAt = function (T) {
 };
 window.DURATION = DUR;
 
+if (Q.has('safe')) [['0','0','0','auto','100%','14%'], ['auto','0','0','0','100%','35%'], ['14%','auto','35%','0','6%','auto'], ['14%','0','35%','auto','6%','auto']]
+  .forEach(([top, right, bottom, left, w, h]) => $('#stage').insertAdjacentHTML('beforeend',
+    `<div class="safe" style="top:${top};right:${right};bottom:${bottom};left:${left};width:${w};height:${h}"></div>`));
 document.fonts.ready.then(() => {
   measure();
   window.READY = true;
